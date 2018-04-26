@@ -1,0 +1,27 @@
+{
+  "name": "inc.xyz",
+  "version": "0.0.1",
+  "description": "Incrementing towards a decentralized publication",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jessebmiller/inc.xyz.git"
+  },
+  "keywords": [
+    "ethereum",
+    "react",
+    "redux",
+    "koa",
+    "node",
+    "js"
+  ],
+  "author": "Jesse B. Miller <jesse@jessebmiller.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jessebmiller/inc.xyz/issues"
+  },
+  "homepage": "https://github.com/jessebmiller/inc.xyz#readme"
+}
