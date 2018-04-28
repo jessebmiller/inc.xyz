@@ -1,0 +1,7 @@
+li, ul {
+    display: inline;
+}
+
+li {
+    margin-left: 1vw;
+}
