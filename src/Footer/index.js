@@ -1,9 +1,7 @@
 import React from 'react'
 
-class Footer extends React.Component {
-  render() {
-    return <h1>Footer Placeholder</h1>
-  }
+const Footer = () => {
+  return <footer>Footer placeholder</footer>
 }
 
 export default Footer
