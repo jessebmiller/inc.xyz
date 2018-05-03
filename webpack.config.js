@@ -1,3 +1,4 @@
+var path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 
 const htmlPlugin = new HtmlWebPackPlugin({
@@ -6,6 +7,9 @@ const htmlPlugin = new HtmlWebPackPlugin({
 })
 
 module.exports = {
+  devServer: {
+    historyApiFallback: true
+  },
   module: {
     rules: [
       {
