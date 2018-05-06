@@ -39,12 +39,3 @@ export function requestError(resourceType, err) {
     error: err
   }
 }
-
-export function idempotently(func) {
-  const alreadyCalled = false;
-  return () => {
-    if (!alreadyCalled) {
-      func()
-    }
-  }
-}
