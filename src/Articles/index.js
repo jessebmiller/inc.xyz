@@ -7,7 +7,7 @@ let Articles = ({ articles, lifecycleState }) => {
     return (
       <p>Requested articles...</p>
     )
-  case "RECIEVED":
+  case "RECEIVED":
     return (
     <ul>
       {articles.map((article) => {

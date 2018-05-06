@@ -40,9 +40,9 @@ function rootReducer(state = initialState, action) {
     nextState[action.resourceType].lifecycleState = "REQUESTED"
     return nextState
 
-  case actionTypes.RECIEVE:
+  case actionTypes.RECEIVE:
     nextState[action.resourceType].resources = action.resources
-    nextState[action.resourceType].lifecycleState = "RECIEVED"
+    nextState[action.resourceType].lifecycleState = "RECEIVED"
     return nextState
 
   case actionTypes.HANDLE_FETCH_ERROR:
