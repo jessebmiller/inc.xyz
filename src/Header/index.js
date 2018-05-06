@@ -8,7 +8,6 @@ import Navigation from './Navigation'
 import css from './index.css'
 
 let Header = ({ landing }) => {
-  console.log(landing)
   return (
     <header className={landing ? css.landing : ''}>
         <Logo />

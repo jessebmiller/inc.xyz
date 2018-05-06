@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import css from './index.css'
 
-let Navigation = ({ routes }) => {
+let Navigation = ({ routes, dispatch }) => {
   // TODO clean this up, there is a lot of unclear logic in this return
   // for each route, if nav is true, render a link
   return (
@@ -12,7 +12,10 @@ let Navigation = ({ routes }) => {
       {routes.map((route) => {
         return route.nav ? (
           <li key={Math.random()}>
-            <Link to={route.path}>{route.anchor}</Link>
+            <Link
+              to={route.path}
+              onClick={() => {dispatch(route.action)}}
+              >{route.anchor}</Link>
           </li>
         ) : ''
       })}
@@ -20,12 +23,16 @@ let Navigation = ({ routes }) => {
   )
 }
 
-function mapProps(state) {
+function mapState(state) {
   return {
     routes: state.routes
   }
 }
 
-Navigation = connect(mapProps)(Navigation)
+function mapDispatch(dispatch) {
+  return { dispatch: dispatch }
+}
+
+Navigation = connect(mapState, mapDispatch)(Navigation)
 
 export default Navigation

@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
 
 import { BrowserRouter, Route, Link } from 'react-router-dom'
 
@@ -10,32 +11,13 @@ import Header from './Header'
 import Content from './Content'
 import Footer from './Footer'
 import { Row } from './Layout'
-import Authors from './Authors'
-import Articles from './Articles'
 
-const initialState = {
-  title: "The Incrementalist",
-  landing: true, // Has the user just landed?
-  articles: [1,2,3,4,5],
-  routes: [
-    {
-      anchor: "Authors",
-      path: "/authors",
-      component: Authors,
-      nav: true
-    },
-    {
-      anchor: "Articles",
-      path: "/articles",
-      component: Articles,
-      nav: true
-    }
-  ]
-}
+import rootReducer from './reducers'
 
-function rootReducer(state = initialState, action) {
-  return state
-}
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+)
 
 const Site = ({ location }) => {
   return (
@@ -53,9 +35,9 @@ const Site = ({ location }) => {
   )
 }
 
-const Incrementalist = () => {
+const TheIncrementalist = () => {
   return (
-    <Provider store={createStore(rootReducer)}>
+    <Provider store={store}>
       <BrowserRouter>
         <Route path="/" component={Site}/>
       </BrowserRouter>
@@ -63,4 +45,7 @@ const Incrementalist = () => {
   )
 }
 
-ReactDOM.render(<Incrementalist />, document.getElementById('Incrementalist'))
+ReactDOM.render(
+  <TheIncrementalist />,
+  document.getElementById('TheIncrementalist')
+)
