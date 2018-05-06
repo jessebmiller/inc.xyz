@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 import Logo from './Logo'
 import Title from './Title'
@@ -6,20 +7,22 @@ import Navigation from './Navigation'
 
 import css from './index.css'
 
-const Header = ({ title }) => {
+let Header = ({ landing }) => {
   return (
-    <header>
-      <div>
+    <header className={landing ? css.landing : ''}>
         <Logo />
-      </div>
-      <div>
-        <Title text={title} />
-      </div>
-      <div>
+        <Title />
         <Navigation />
-      </div>
     </header>
   )
 }
+
+function mapProps(state) {
+  return {
+    landing: state.landing
+  }
+}
+
+Header = connect(mapProps)(Header)
 
 export default Header

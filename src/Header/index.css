@@ -1,9 +1,12 @@
 div {
     margin-right: 3vw;
-    display: inline;
 }
 
 header {
     margin-top: 8vw;
     margin-bottom: 6vw;
+}
+
+.landing {
+    font-size: 2em;
 }

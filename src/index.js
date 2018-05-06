@@ -1,23 +1,32 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import { createStore, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+
+import { BrowserRouter, Route, Link } from 'react-router-dom'
+
 import Header from './Header'
 import Content from './Content'
 import Footer from './Footer'
 import { Row } from './Layout'
 
-const site = {
-  name: "The Incrementalist"
-}
+import rootReducer from './reducers'
 
-const Incrementalist = () => {
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+)
+
+const Site = ({ location }) => {
   return (
-    <div>
+    <div className="site">
       <Row>
-        <Header title={site.name}/>
+        <Header />
       </Row>
       <Row>
-        <Content />
+        <Content location={location}/>
       </Row>
       <Row>
         <Footer />
@@ -26,4 +35,17 @@ const Incrementalist = () => {
   )
 }
 
-ReactDOM.render(<Incrementalist />, document.getElementById('Incrementalist'))
+const TheIncrementalist = () => {
+  return (
+    <Provider store={store}>
+      <BrowserRouter>
+        <Route path="/" component={Site}/>
+      </BrowserRouter>
+    </Provider>
+  )
+}
+
+ReactDOM.render(
+  <TheIncrementalist />,
+  document.getElementById('TheIncrementalist')
+)
