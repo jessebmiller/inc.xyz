@@ -28,6 +28,19 @@ const initialResources = {
   }
 }
 
+// If we happen to have landed on a path that should have resources loaded,
+// dispatch the appropriate action
+export function dispatchLocationResourceAction(dispatch) {
+  Object.keys(initialResources).map(resourceType => {
+    const resource = initialResources[resourceType]
+    if (window.location.pathname === resource.path) {
+      // we are on a path that should be showing these resouces, let's
+      // dispatch the action.
+      resource.action(dispatch)
+    }
+  })
+}
+
 function resourceReducer(resources = initialResources, action) {
 
   function assignLifecycleState(resource, lifecycleState) {
