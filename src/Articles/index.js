@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-let Articles = (state) => {
+let Articles = ({ articles }) => {
   return (
     <ul>
-      {state.articles.map((article) => {
+      {articles.map((article) => {
         return (
-          <p key={Math.random()}>article list entry placeholder {article}</p>
+          <p key={Math.random()}>{article}</p>
         )
       })}
     </ul>
@@ -15,7 +15,8 @@ let Articles = (state) => {
 
 function mapState(state) {
   let mapping = {
-    articles: state.articles.resources
+    // TODO ... awkward (resources.type.resources) :/
+    articles: state.resources.articles.resources
   }
   return mapping
 }

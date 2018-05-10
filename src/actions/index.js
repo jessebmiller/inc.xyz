@@ -1,6 +1,6 @@
 export const actionTypes = {
   FETCH: 'FETCH',
-  RECIEVE: 'RECIEVE',
+  RECEIVE: 'RECEIVE',
   HANDLE_FETCH_ERROR: 'HANDLE_FETCH_ERROR'
 }
 
@@ -26,7 +26,7 @@ export function request(resourceType) {
 
 export function recieve(resourceType, resources) {
   return {
-    type: actionTypes.RECIEVE,
+    type: actionTypes.RECEIVE,
     resourceType: resourceType,
     resources: resources
   }
@@ -37,14 +37,5 @@ export function requestError(resourceType, err) {
     type: actionTypes.HANDLE_FETCH_ERROR,
     resourceType: resourceType,
     error: err
-  }
-}
-
-export function idempotently(func) {
-  const alreadyCalled = false;
-  return () => {
-    if (!alreadyCalled) {
-      func()
-    }
   }
 }

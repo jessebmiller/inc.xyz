@@ -1,56 +1,79 @@
+import { combineReducers } from 'redux'
+
 import { request, recieve, actionTypes } from '../actions'
 
 import Authors from '../Authors'
 import Articles from '../Articles'
 
-const initialState = {
-  title: "The Incrementalist",
-  landing: true, // Has the user just landed?
-  articles: {
-    lifecycleState: 'INITIAL',
-    resources: []
-  },
+const initialResources = {
   authors: {
+    anchor: "Authors",
+    path: "/authors",
+    resourceComponent: Authors,
+    nav: true,
+    action: request('authors'),
+    contentType: 'authors',
     lifecycleState: 'INITIAL',
     resources: []
   },
-  routes: [
-    {
-      anchor: "Authors",
-      path: "/authors",
-      component: Authors,
-      nav: true,
-      action: request('authors')
-    },
-    {
-      anchor: "Articles",
-      path: "/articles",
-      component: Articles,
-      nav: true,
-      action: request('articles')
-    }
-  ]
-}
-
-function rootReducer(state = initialState, action) {
-  const nextState = Object.assign({}, state)
-  switch(action.type) {
-
-  case actionTypes.FETCH:
-    nextState[action.resourceType].lifecycleState = "REQUESTED"
-    return nextState
-
-  case actionTypes.RECIEVE:
-    nextState[action.resourceType].resources = action.resources
-    nextState[action.resourceType].lifecycleState = "RECIEVED"
-    return nextState
-
-  case actionTypes.HANDLE_FETCH_ERROR:
-    nextState[action.resourceType].livecycleState = "FETCH_ERROR"
-
-  default:
-    return nextState
+  articles: {
+    anchor: "Articles",
+    path: "/articles",
+    resourceComponent: Articles,
+    nav: true,
+    action: request('articles'),
+    contentType: 'articles',
+    lifecycleState: 'INITIAL',
+    resources: []
   }
 }
 
-export default rootReducer
+function resourceReducer(resources = initialResources, action) {
+
+  function assignLifecycleState(resource, lifecycleState) {
+    return Object.assign(
+      {},
+      resource,
+      {lifecycleState: lifecycleState}
+    )
+  }
+
+  let resource
+  switch(action.type) {
+  case actionTypes.FETCH:
+    resource = assignLifecycleState(resources[action.resourceType], "REQUESTED")
+    return Object.assign({}, resources, {[action.resourceType]: resource})
+
+  case actionTypes.RECEIVE:
+    resource = assignLifecycleState(resources[action.resourceType], "RECEIVED")
+    resource.resources = action.resources
+    return Object.assign({}, resources, {[action.resourceType]: resource})
+
+  case actionTypes.HANDLE_FETCH_ERROR:
+    resource = assignLifecycleState(resources[action.resourceType], "FETCH_ERROR")
+    return Object.assign({}, resources, {[action.resourceType]: resource})
+
+  default:
+    return resources
+  }
+}
+
+function landingReducer(landing = true, action) {
+  // if the action is a type that should change the landing status
+  // make it false.
+  if (action.invalidateLanding) {
+    return false
+  }
+  return landing
+}
+
+// find a way to gather this back into a single declarative spot
+function titleReducer(title = "The Incrementalist", action) {
+  return title
+}
+
+export default combineReducers({
+  title: titleReducer,
+  resources: resourceReducer,
+  landing: landingReducer
+})
