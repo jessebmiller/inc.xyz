@@ -5,7 +5,6 @@ import { Route } from 'react-router-dom'
 import Lifecycle from '../Lifecycle'
 
 let Content = (state) => {
-  console.log("Content called with", state)
   const content = Object.keys(state.resources).map(resourceType => {
     const resource = state.resources[resourceType]
     return <Route {...resource}
