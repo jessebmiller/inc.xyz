@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import ReactMarkdown from 'react-markdown'
+
 let Articles = ({ articles }) => {
   return (
     <ul>
       {articles.map((article) => {
-        return (
-          <p key={Math.random()}>{article}</p>
-        )
+        return <ReactMarkdown key={Math.random()} source={article} />
       })}
     </ul>
   )

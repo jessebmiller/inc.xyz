@@ -6,7 +6,10 @@ export const actionTypes = {
 
 function fetchResources(resourceType) {
   return new Promise((resolve, reject) => {
-    setTimeout(resolve, 2000, ["article 1", "article 2"])
+    setTimeout(resolve, 1000, [
+      "# article 1 \n\n some stuff",
+      "# Great title \n\n such learn",
+      "# This is a header\n\nAnd this is a paragraph"])
   })
 }
 
