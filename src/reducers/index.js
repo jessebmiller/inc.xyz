@@ -3,7 +3,7 @@ import { combineReducers } from 'redux'
 import { request, recieve, actionTypes } from '../actions'
 
 import Authors from '../Authors'
-import Articles from '../Articles'
+import { Articles } from '../Articles'
 
 const initialResources = {
   authors: {
@@ -14,7 +14,7 @@ const initialResources = {
     action: request('authors'),
     contentType: 'authors',
     lifecycleState: 'INITIAL',
-    resources: []
+    resources: { /* resourceID: resource */ }
   },
   articles: {
     anchor: "Articles",
@@ -24,7 +24,7 @@ const initialResources = {
     action: request('articles'),
     contentType: 'articles',
     lifecycleState: 'INITIAL',
-    resources: []
+    resources: { /* resourceID: resource */ }
   }
 }
 
@@ -33,7 +33,7 @@ const initialResources = {
 export function dispatchLocationResourceAction(dispatch) {
   Object.keys(initialResources).map(resourceType => {
     const resource = initialResources[resourceType]
-    if (window.location.pathname === resource.path) {
+    if (window.location.pathname.startsWith(resource.path)) {
       // we are on a path that should be showing these resouces, let's
       // dispatch the action.
       resource.action(dispatch)

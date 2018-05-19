@@ -7,6 +7,9 @@ const htmlPlugin = new HtmlWebPackPlugin({
 })
 
 module.exports = {
+  output: {
+    publicPath: '/'
+  },
   devServer: {
     historyApiFallback: true
   },
