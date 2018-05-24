@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Lifecycle = ({ lifecycleState, resourceComponent }) => {
-  console.log("Lifecycle gets", lifecycleState, resourceComponent)
   switch(lifecycleState) {
   case "REQUESTED":
     return (

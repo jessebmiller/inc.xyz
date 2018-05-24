@@ -13,6 +13,7 @@ import Footer from './Footer'
 import { Row } from './Layout'
 
 import rootReducer from './reducers'
+import { dispatchLocationResourceAction } from './reducers'
 
 const store = createStore(
   rootReducer,
@@ -49,3 +50,6 @@ ReactDOM.render(
   <TheIncrementalist />,
   document.getElementById('TheIncrementalist')
 )
+
+// dispatch the action for a resource that matches the path we landed on
+dispatchLocationResourceAction(store.dispatch)

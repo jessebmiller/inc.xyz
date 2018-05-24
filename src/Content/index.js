@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
+import { Route, withRouter } from 'react-router-dom'
 
 import Lifecycle from '../Lifecycle'
 
 let Content = (state) => {
-  console.log("Content called with", state)
   const content = Object.keys(state.resources).map(resourceType => {
     const resource = state.resources[resourceType]
     return <Route {...resource}
@@ -27,6 +26,6 @@ const mapProps = (state) => {
   return Object.assign({}, state)
 }
 
-Content = connect(mapProps)(Content)
+Content = withRouter(connect(mapProps)(Content))
 
 export default Content

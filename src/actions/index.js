@@ -6,7 +6,23 @@ export const actionTypes = {
 
 function fetchResources(resourceType) {
   return new Promise((resolve, reject) => {
-    setTimeout(resolve, 2000, ["article 1", "article 2"])
+    setTimeout(resolve, 1000, {
+      mockID01: {
+        title: "Article Title",
+        abstract: "Article abstract...",
+        full: "# Article \n\n full article about some stuff",
+        fundingAddress: "0x123",
+        fundingGoal: 100,
+        funded: true
+      },
+      mockID02: {
+        title: "Another Title",
+        abstract: "Just the abstract...",
+        fundingAddress: "0x456",
+        fundingGoal: 100000,
+        funded: false
+      }
+    })
   })
 }
 
