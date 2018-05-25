@@ -2,20 +2,9 @@ import { combineReducers } from 'redux'
 
 import { request, recieve, actionTypes } from '../actions'
 
-import Authors from '../Authors'
-import { Articles } from '../Articles'
+import Articles from '../Articles'
 
 const initialResources = {
-  authors: {
-    anchor: "Authors",
-    path: "/authors",
-    resourceComponent: Authors,
-    nav: true,
-    action: request('authors'),
-    contentType: 'authors',
-    lifecycleState: 'INITIAL',
-    resources: { /* resourceID: resource */ }
-  },
   articles: {
     anchor: "Articles",
     path: "/articles",
