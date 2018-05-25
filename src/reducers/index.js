@@ -2,7 +2,6 @@ import { combineReducers } from 'redux'
 
 import { request, recieve, actionTypes } from '../actions'
 
-import Authors from '../Authors'
 import { Articles } from '../Articles'
 
 const initialResources = {
