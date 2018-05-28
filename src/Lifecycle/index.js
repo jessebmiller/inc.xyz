@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Lifecycle = ({ lifecycleState, resourceComponent }) => {
+  console.log("lifecycle", lifecycleState, resourceComponent)
   switch(lifecycleState) {
   case "REQUESTED":
     return (
@@ -11,15 +12,21 @@ const Lifecycle = ({ lifecycleState, resourceComponent }) => {
     return <Resource />
   case "FETCH_ERROR":
     return (
-      <p>Error fetching content :/ sorry this is new..</p>
+      <div>
+        <p>Error fetching content :/ sorry this is new</p>
+        <p>you can help at github.com/jessebmiller/inc.xyz</p>
+      </div>
     )
   case "INITIAL":
     return (
-      <p>We still need to load content when you refresh on this URL...</p>
+      <p>We still need to load content when you load this URL...</p>
     )
   default:
     return (
-      <p>We don't know where the content is...sorry this is new.</p>
+      <div>
+        <p>We don't know where the content is...sorry this is new.</p>
+        <p>you can help at github.com/jessebmiller/inc.xyz</p>
+      </div>
     )
   }
 }

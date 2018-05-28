@@ -4,28 +4,20 @@ import { Route, withRouter } from 'react-router-dom'
 
 import Lifecycle from '../Lifecycle'
 
-let Content = (state) => {
-  const content = Object.keys(state.resources).map(resourceType => {
-    const resource = state.resources[resourceType]
-    return <Route {...resource}
-    component={() => {
-      return (
-        <Lifecycle
-          lifecycleState={resource.lifecycleState}
-          resourceComponent={resource.resourceComponent}
-          />
-      )
-    }}
-    key={Math.random()}/>
-  })
-  return content
+let Content = ({ resource }) => {
+  console.log("resource", resource)
+  return (
+    <Route
+      {...resource}
+      component={() => <Lifecycle {...resource} />}
+      />
+  )
 }
 
-const mapProps = (state) => {
-  // TODO is this a bottleneck?
-  return Object.assign({}, state)
+function mapState(state) {
+  return { resource: state.resource }
 }
 
-Content = withRouter(connect(mapProps)(Content))
+Content = withRouter(connect(mapState)(Content))
 
 export default Content

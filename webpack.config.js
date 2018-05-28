@@ -7,6 +7,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
 })
 
 module.exports = {
+  entry: ["babel-polyfill", "./src/index.js"],
   output: {
     publicPath: '/'
   },

@@ -1,9 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
-import thunk from 'redux-thunk'
 
 import { BrowserRouter, Route, Link } from 'react-router-dom'
 
@@ -12,15 +10,12 @@ import Content from './Content'
 import Footer from './Footer'
 import { Row } from './Layout'
 
-import rootReducer from './reducers'
-import { dispatchLocationResourceAction } from './reducers'
+import { setEth, requestLocationResource } from './actions'
 
-const store = createStore(
-  rootReducer,
-  applyMiddleware(thunk)
-)
+import store from './store'
 
 const Site = ({ location }) => {
+  requestLocationResource(location)
   return (
     <div className="site">
       <Row>
@@ -46,10 +41,20 @@ const TheIncrementalist = () => {
   )
 }
 
-ReactDOM.render(
-  <TheIncrementalist />,
-  document.getElementById('TheIncrementalist')
-)
+window.addEventListener('load', function() {
 
-// dispatch the action for a resource that matches the path we landed on
-dispatchLocationResourceAction(store.dispatch)
+  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+  if (typeof web3 !== 'undefined') {
+
+    // Use the browser's ethereum provider
+    store.dispatch(setEth(web3.currentProvider))
+
+  } else {
+    console.log('No web3? You should consider trying MetaMask!')
+  }
+
+  ReactDOM.render(
+    <TheIncrementalist />,
+    document.getElementById('TheIncrementalist')
+  )
+})
