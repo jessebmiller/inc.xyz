@@ -2,12 +2,12 @@ var path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 
 const htmlPlugin = new HtmlWebPackPlugin({
-  template: "./src/index.html",
+  template: "./src/client/index.html",
   filename: "./index.html"
 })
 
 module.exports = {
-  entry: ["babel-polyfill", "./src/index.js"],
+  entry: ["babel-polyfill", "./src/client/index.js"],
   output: {
     publicPath: '/'
   },
@@ -18,7 +18,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /server/],
         use: {
           loader: "babel-loader"
         }
