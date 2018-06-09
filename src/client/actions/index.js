@@ -5,44 +5,42 @@ import Eth from 'ethjs'
 import { sign } from '../helpers'
 
 // prepare data for a signed resource request
-const prepResourceRequest = resourceId => {
-  return `${new Date()}|${resourceId}`
+const prepResourceRequest = (resourceId, timestamp) => {
+  return `${timestamp}|${resourceId}`
 }
 
-const resourceURL = signedResourceRequest => {
-  URL = `http://localhost:3000/v1/resources/?resource-request=${signedResourceRequest}`
+const resourceURL = (sig, msg) => {
+  URL = `http://localhost:3000/v1/resources/?sig=${sig}&msg=${msg}`
   return URL
 }
 
 export async function requestLocationResource({ pathname }) {
   const resourceId = pathname.substring(1)
   const eth = store.getState().eth
-  const signedResourceRequest = await sign(prepResourceRequest(resourceId))
-  store.dispatch(request(signedResourceRequest))
+  const timestamp = new Date()
+  const resourceRequest = prepResourceRequest(resourceId, timestamp)
+  const signedResourceRequest = await sign(resourceRequest)
+  store.dispatch(request(signedResourceRequest, resourceRequest))
 }
 
-function fetchResource(signedResourceRequest) {
+function fetchResource(signedResourceRequest, resourceRequest) {
   return new Promise((resolve, reject) => {
     // TODO what if the resource doesnt exist for that id?
-    fetch(resourceURL(signedResourceRequest), {
-      headers:{
-        'Content-Type': "application/json"
-      }
-    }).then(async response => {
-      // if they didn't pay, redact the content
-      let resource = await response.json()
-      resource = resource.paid ? resource : Object.assign({}, resource, {content: ""})
-      resolve(resource)
-    })
+    fetch(resourceURL(signedResourceRequest, resourceRequest))
+      .then(async response => {
+        let resource = await response.json()
+        resolve(resource)
+      }).catch(reject)
   })
 }
 
-export const request = (signedResourceRequest) => dispatch => {
+export const request = (signedResourceRequest, resourceRequest) => dispatch => {
   dispatch({
     type: actionTypes.FETCH,
-    signedResourceRequest
+    signedResourceRequest,
+    resourceRequest
   })
-  fetchResource(signedResourceRequest).then(resource => {
+  fetchResource(signedResourceRequest, resourceRequest).then(resource => {
     dispatch(recieve(resource))
   }).catch(err => {
     dispatch(requestError(err))

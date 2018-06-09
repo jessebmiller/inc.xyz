@@ -16,6 +16,7 @@ export async function sign (data, account) {
       if (err !== null) {
         reject(err)
       }
+      console.log(result)
       resolve(result.result)
     })
   })

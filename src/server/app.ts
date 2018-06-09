@@ -1,3 +1,15 @@
+import {
+    fromRpcSig,
+    toBuffer,
+    hashPersonalMessage,
+    ecrecover,
+    publicToAddress,
+    bufferToHex
+} from 'ethereumjs-util'
+
+import resources from './resources'
+import { signerDidPay, summary, withinTimeWindow } from './helpers'
+
 const express = require('express')
 
 const app = express()
@@ -9,6 +21,7 @@ app.use(function(req, res, next) {
         "Origin, X-Requested-With, Content-Type, Accept")
   next()
 })
+
 app.use(express.static("dist"))
 
 interface ResourceRequest {
@@ -17,36 +30,52 @@ interface ResourceRequest {
     resourceId: string
 }
 
-const resources = {
-    "0x123": {
-        title: "Article Title",
-        "abstract": "Article abstract...",
-        content: "# Article \n\n full article about some stuff",
-        fundingAddress: "0x123",
-        price: 100000,
-        "type": "Article",
-    },
-    "0x456": {
-        title: "Another Title",
-        "abstract": "Just the abstract...",
-        content: "# Full Content \n\n shouldn't be allowed",
-        fundingAddress: "0x456",
-        price: 100000,
-        "type": "Article",
+function recoverResourceRequest(sig: string, msg: string): ResourceRequest {
+    const [timestamp, resourceId] = msg.split('|')
+    const requestBuffer = toBuffer(sig)
+    const sigParams = fromRpcSig(requestBuffer)
+    const resourceIdBuffer = toBuffer(resourceId)
+    const resourceIdHash = hashPersonalMessage(resourceIdBuffer)
+    const publicKey = ecrecover(
+        resourceIdHash,
+        sigParams.v,
+        sigParams.r,
+        sigParams.s,
+    )
+    const addressBuffer = publicToAddress(publicKey)
+    const signingAddress = bufferToHex(addressBuffer)
+    // TODO CHECK FOR VALIDITY AND ERRORS!!!
+    const resourceRequest = {
+        signingAddress,
+        timestamp: new Date(timestamp),
+        resourceId,
     }
-}
-
-function recoverResourceRequest(signedRequest: string): ResourceRequest {
-    return {
-        signingAddress: "0x123",
-        timestamp: new Date(),
-        resourceId: "0x456",
-    }
+    return resourceRequest
 }
 
 app.get("/v1/resources/", (req, res) => {
-    const request = recoverResourceRequest(req.query["resource-request"])
-    res.status(200).send(resources["0x123"])
+    console.log("GET /v1/resources/", req.query["resource-request"])
+    const {
+        signingAddress,
+        timestamp,
+        resourceId,
+    } = recoverResourceRequest(req.query["sig"], req.query["msg"])
+    // confirm timestamp in valid range
+    if (!withinTimeWindow(timestamp)) {
+        res.status(403).send("Forbidden")
+        return
+    }
+    // TODO probably could use a nonce in the protocol...
+    // check if signingAddress paid for resource Id
+    // return resource if paid for
+    // return summary if not paid for
+    let resource = resources[resourceId]
+    if (!signerDidPay(signingAddress, resourceId)) {
+        resource = summary(resource)
+        resource.paid = false
+    }
+    resource.paid = true
+    res.status(200).send(resource)
 })
 
 app.listen(3000, () => console.log("Listening on port 3000"))
