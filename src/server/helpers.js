@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signerDidPay = (signingAddress, resourceId) => {
+    // TODO kinda looks like setting up a contract to identify payment is the
+    //      easier way to do this. It's that or setting up an index.
+    //      maybe etherscan can help here?
 };
 exports.summary = resource => {
     return Object.assign({}, resource, { content: "" });

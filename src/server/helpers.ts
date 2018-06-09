@@ -1,5 +1,7 @@
 export const signerDidPay = (signingAddress: string, resourceId: string): boolean => {
-    
+    // TODO kinda looks like setting up a contract to identify payment is the
+    //      easier way to do this. It's that or setting up an index.
+    //      maybe etherscan can help here?
 }
 
 export const summary = resource => {
