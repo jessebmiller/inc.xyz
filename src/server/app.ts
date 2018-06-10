@@ -56,7 +56,7 @@ function recoverResourceRequest(sig: string, msg: string): ResourceRequest {
 }
 
 app.get("/v1/resources/", async (req, res) => {
-    console.log("GET /v1/resources/", req.query["msg"])
+    console.log("GET /v1/resources/", req.query.msg, query.sig)
     const {
         signingAddress,
         timestamp,

@@ -1,5 +1,4 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import unit from 'ethjs-unit'
 
 let FundButton = ({ paid, price, fundingAddress, type }) => {
@@ -11,16 +10,5 @@ let FundButton = ({ paid, price, fundingAddress, type }) => {
     )
   )
 }
-
-/*
-function mapState(state) {
-  console.log("state", state)
-  return {
-    eth: state.eth
-  }
-}
-
-FundButton = connect(mapState)(FundButton)
-*/
 
 export default FundButton

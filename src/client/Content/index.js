@@ -5,7 +5,6 @@ import { Route, withRouter } from 'react-router-dom'
 import Lifecycle from '../Lifecycle'
 
 let Content = ({ resource }) => {
-  console.log("resource", resource)
   return (
     <Route
       {...resource}
