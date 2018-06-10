@@ -39,11 +39,11 @@ function siteTitleReducer(siteTitle = "The Incrementalist", action) {
   return siteTitle
 }
 
-function ethReducer(eth, action) {
+function ethReducer(eth = null, action) {
   if (action.type === actionTypes.SET_ETH) {
     return action.eth
   }
-  return action
+  return eth
 }
 
 function actionLogReducer(actionLog = [], action) {

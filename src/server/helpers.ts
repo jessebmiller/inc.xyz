@@ -1,7 +1,82 @@
-export const signerDidPay = (signingAddress: string, resourceId: string): boolean => {
-    // TODO kinda looks like setting up a contract to identify payment is the
-    //      easier way to do this. It's that or setting up an index.
-    //      maybe etherscan can help here?
+import { URL } from 'url'
+import fetch from 'node-fetch'
+
+interface Transaction {
+    "from": string
+    to: string
+    value: string
+    confirmations: string
+}
+
+`
+{
+    "blockNumber":"330511",
+    "timeStamp":"1443927353",
+    "hash":"0x27e199cba5fee6d23fb084ada3407711f431b552ee1b8d46c670093a0e0ecbd6",
+    "nonce":"12",
+    "blockHash":"0x7166f1377d5e1f91f...0dd768c379ce3ec646eda7e4c97be0e6",
+    "transactionIndex":"0",
+    "from":"0x063dd253c8da4ea9b12105781c9611b8297f5d14",
+    "to":"0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae",
+    "value":"0",
+    "gas":"300000",
+    "gasPrice":"50000000000",
+    "isError":"0",
+    "txreceipt_status":"",
+    "input":"0x797af62726fa5f182c...b7479c893be2548ea03d9dcd0c8e598",
+    "contractAddress":"",
+    "cumulativeGasUsed":"35817",
+    "gasUsed":"35817",
+    "confirmations":"5428830",
+}
+`
+
+const transactionPaysPrice = (
+    tx: Transaction,
+    resourceId: string,
+    price: number,
+): boolean => {
+    if (resourceId !== tx.to) {
+        return false
+    }
+    if (price > parseInt(tx.value, 10)) {
+        return false
+    }
+    if (parseInt(tx.confirmations, 10) < 5) {
+        return false
+    }
+    // it's confirmed, to the resource, and is enough value
+    // TODO total all transactions so if someone pays less they aren't screwed.
+    return true
+}
+
+export const signerDidPay = async (
+    signingAddress: string,
+    resourceId: string,
+    price: number,
+): Promise<boolean> => {
+    console.log(signingAddress, resourceId, price)
+    let apiURL = new URL("http://api-ropsten.etherscan.io/api")
+    apiURL.searchParams.append("address", signingAddress)
+    apiURL.searchParams.append("module", "account")
+    apiURL.searchParams.append("action", "txlist")
+    const urlString = apiURL.toString()
+    console.log(urlString)
+    const response = await fetch(urlString)
+    const responseObj = await response.json()
+    console.log(responseObj)
+    for(let tx of responseObj.result) {
+        if(transactionPaysPrice(tx, resourceId, price)) {
+            console.log("returning Promise<true>")
+            return new Promise<boolean>((resolve, reject) => {
+                resolve(true)
+            })
+        }
+    }
+    console.log("resutning Promise<false>")
+    return new Promise<boolean>((resolve, reject) => {
+        resolve(false)
+    })
 }
 
 export const summary = resource => {

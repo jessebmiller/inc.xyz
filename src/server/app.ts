@@ -4,7 +4,7 @@ import {
     hashPersonalMessage,
     ecrecover,
     publicToAddress,
-    bufferToHex
+    bufferToHex,
 } from 'ethereumjs-util'
 
 import resources from './resources'
@@ -32,19 +32,21 @@ interface ResourceRequest {
 
 function recoverResourceRequest(sig: string, msg: string): ResourceRequest {
     const [timestamp, resourceId] = msg.split('|')
-    const requestBuffer = toBuffer(sig)
-    const sigParams = fromRpcSig(requestBuffer)
     const resourceIdBuffer = toBuffer(resourceId)
     const resourceIdHash = hashPersonalMessage(resourceIdBuffer)
+
+    const sigBuffer = toBuffer(sig)
+    const sigParams = fromRpcSig(sigBuffer)
     const publicKey = ecrecover(
-        resourceIdHash,
+        hashPersonalMessage(new Buffer(msg, 'utf8')),
         sigParams.v,
         sigParams.r,
         sigParams.s,
     )
+
     const addressBuffer = publicToAddress(publicKey)
     const signingAddress = bufferToHex(addressBuffer)
-    // TODO CHECK FOR VALIDITY AND ERRORS!!!
+
     const resourceRequest = {
         signingAddress,
         timestamp: new Date(timestamp),
@@ -53,8 +55,8 @@ function recoverResourceRequest(sig: string, msg: string): ResourceRequest {
     return resourceRequest
 }
 
-app.get("/v1/resources/", (req, res) => {
-    console.log("GET /v1/resources/", req.query["resource-request"])
+app.get("/v1/resources/", async (req, res) => {
+    console.log("GET /v1/resources/", req.query["msg"])
     const {
         signingAddress,
         timestamp,
@@ -70,11 +72,13 @@ app.get("/v1/resources/", (req, res) => {
     // return resource if paid for
     // return summary if not paid for
     let resource = resources[resourceId]
-    if (!signerDidPay(signingAddress, resourceId)) {
+    const paid = await signerDidPay(signingAddress, resourceId, resource.price)
+    if (!paid) {
         resource = summary(resource)
         resource.paid = false
+    } else {
+        resource.paid = true
     }
-    resource.paid = true
     res.status(200).send(resource)
 })
 

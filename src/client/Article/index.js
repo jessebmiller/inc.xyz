@@ -21,7 +21,6 @@ let Article = ({ article }) => {
 
 function mapState(state) {
   return {
-    // TODO ... awkward (resources.type.resources) :/
     article: state.resource
   }
 }
