@@ -1,7 +1,7 @@
 steps:
 - id: build
   name: gcr.io/cloud-builders/docker
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/inc.xyz:$TAG_NAME', '.']
+  args: ['build', '--rm', 'false', '-t', 'gcr.io/$PROJECT_ID/inc.xyz:$TAG_NAME', '.']
 - id: push
   name: gcr.io/cloud-builders/docker
   args: ['push', 'gcr.io/$PROJECT_ID/inc.xyz:$TAG_NAME']
@@ -14,6 +14,6 @@ steps:
     - update-container
     - inc-xyz-proto
     - --container-image
-    - gcr.io/$PROJECT_ID/inc.xyz:$COMMIT_SHA
+    - gcr.io/$PROJECT_ID/inc.xyz:$TAG_NAME
     - --zone
     - us-east1-b
