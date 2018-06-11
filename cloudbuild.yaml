@@ -4,4 +4,13 @@ steps:
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/inc.xyz:$COMMIT_SHA', '.']
 - id: deploy
   name: gcr.io/cloud-builders/gcloud
-  args: ['beta', 'compute', 'instances', 'update-container', 'inc-xyz-proto', '--container-image', 'gcr.io/$PROJECT_ID/inc.xyz:$COMMIT_SHA']
+  args:
+    - beta
+    - compute
+    - instances
+    - update-container
+    - inc-xyz-proto
+    - --container-image
+    - gcr.io/$PROJECT_ID/inc.xyz:$COMMIT_SHA
+    - --zone
+    - us-east1-b
