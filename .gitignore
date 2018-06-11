@@ -1,6 +1,5 @@
-*secret*
-
 dist/
+server-dist/
 
 # Logs
 logs

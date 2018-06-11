@@ -55,25 +55,20 @@ export const signerDidPay = async (
     resourceId: string,
     price: number,
 ): Promise<boolean> => {
-    console.log(signingAddress, resourceId, price)
     let apiURL = new URL("http://api-ropsten.etherscan.io/api")
     apiURL.searchParams.append("address", signingAddress)
     apiURL.searchParams.append("module", "account")
     apiURL.searchParams.append("action", "txlist")
     const urlString = apiURL.toString()
-    console.log(urlString)
     const response = await fetch(urlString)
     const responseObj = await response.json()
-    console.log(responseObj)
     for(let tx of responseObj.result) {
         if(transactionPaysPrice(tx, resourceId, price)) {
-            console.log("returning Promise<true>")
             return new Promise<boolean>((resolve, reject) => {
                 resolve(true)
             })
         }
     }
-    console.log("resutning Promise<false>")
     return new Promise<boolean>((resolve, reject) => {
         resolve(false)
     })

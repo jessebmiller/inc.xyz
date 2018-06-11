@@ -10,7 +10,7 @@ const prepResourceRequest = (resourceId, timestamp) => {
 }
 
 const resourceURL = (sig, msg) => {
-  URL = `http://localhost:3000/v1/resources/?sig=${sig}&msg=${msg}`
+  URL = `http://${window.location.host}/v1/resources/?sig=${sig}&msg=${msg}`
   return URL
 }
 

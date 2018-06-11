@@ -22,7 +22,7 @@ app.use(function(req, res, next) {
   next()
 })
 
-app.use(express.static("dist"))
+app.use(express.static(__dirname + "/client"))
 
 interface ResourceRequest {
     signingAddress: string
@@ -56,18 +56,18 @@ function recoverResourceRequest(sig: string, msg: string): ResourceRequest {
 }
 
 app.get("/v1/resources/", async (req, res) => {
-    console.log("GET /v1/resources/", req.query.msg, query.sig)
+    console.log("GET /v1/resources/", req.query.msg, req.query.sig)
     const {
         signingAddress,
         timestamp,
         resourceId,
-    } = recoverResourceRequest(req.query["sig"], req.query["msg"])
+    } = recoverResourceRequest(req.query.sig, req.query.msg)
     // confirm timestamp in valid range
     if (!withinTimeWindow(timestamp)) {
         res.status(403).send("Forbidden")
         return
     }
-    // TODO probably could use a nonce in the protocol...
+    // TODO reconsider the protocol
     // check if signingAddress paid for resource Id
     // return resource if paid for
     // return summary if not paid for
@@ -82,4 +82,8 @@ app.get("/v1/resources/", async (req, res) => {
     res.status(200).send(resource)
 })
 
-app.listen(3000, () => console.log("Listening on port 3000"))
+app.get("/*", (req, res) => {
+    res.sendFile(__dirname + '/client/index.html')
+})
+
+app.listen(80, () => console.log("Listening on port 80"))
