@@ -1,7 +1,10 @@
 steps:
 - id: build
   name: gcr.io/cloud-builders/docker
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/inc.xyz:$COMMIT_SHA', '.']
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/inc.xyz:$TAG_NAME', '.']
+- id: push
+  name: gcr.io/cloud-builders/docker
+  args: ['push', 'gcr.io/$PROJECT_ID/inc.xyz:$TAG_NAME']
 - id: deploy
   name: gcr.io/cloud-builders/gcloud
   args:
