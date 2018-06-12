@@ -6,7 +6,7 @@ let FundButton = ({ paid, price, fundingAddress, type }) => {
     paid ? (
       null
     ) : (
-      <p>Please pay {unit.fromWei(price, "ether")}ETH to {fundingAddress} to unlock this {type}.</p>
+      <p>Please pay {unit.fromWei(price, "ether")}ETH to {fundingAddress} on Ropsten to unlock this {type}.</p>
     )
   )
 }

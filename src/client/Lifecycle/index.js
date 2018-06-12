@@ -19,7 +19,7 @@ const Lifecycle = ({ lifecycleState, type }) => {
     )
   case "INITIAL":
     return (
-      <p>We still need to load content when you load this URL...</p>
+      <p>Metamask should be asking for your signature so we can check to see if you've paid...</p>
     )
   default:
     return (
