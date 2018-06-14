@@ -14,7 +14,6 @@ const getResources = () => {
             return {}
         }
         filenames.forEach((filename) => {
-            console.log(filename)
             fs.readFile(resourceDir + filename, 'utf8', (err, data) => {
                 if (err) {
                     return
@@ -29,7 +28,6 @@ const getResources = () => {
                     content: parsedFrontmatter.content,
                     ...parsedFrontmatter.data,
                 }
-                console.log(resources)
             })
         })
     })

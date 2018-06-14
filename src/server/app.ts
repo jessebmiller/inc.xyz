@@ -72,7 +72,7 @@ app.get("/v1/resources/", async (req, res) => {
     // TODO reconsider the protocol
     // check if signingAddress paid for resource Id
     // return resource if paid for
-    // return summary if not paid for
+    // return summary if not paid fo
     let resource = resources[resourceId]
     const paid = await signerDidPay(signingAddress, resource.fundingAddress, resource.price)
     if (!paid) {

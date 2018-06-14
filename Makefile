@@ -6,7 +6,7 @@ build:
 
 .PHONY: local
 local: build
-	docker run -it --rm -p 80:80 -v $(shell pwd)/src/server/resources:/app/server/resources jesse/inc.xyz:$(TAG)
+	docker run -it --rm --name inc -p 80:80 -v $(shell pwd)/src/server/resources:/app/server/resources jesse/inc.xyz:$(TAG)
 
 .PHONY: publish
 publish: build
