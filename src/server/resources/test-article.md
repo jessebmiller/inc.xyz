@@ -5,7 +5,7 @@ abstract: |
   system works.
 price: 1000000000000000
 type: Article
-fundingAddress: 0x293acc337277d5d4618e919f8d6fe22adcdb401e
+fundingAddress: "0x293acc337277d5d4618e919f8d6fe22adcdb401e"
 ---
 
 ## How this thing works
@@ -19,5 +19,4 @@ fundingAddress: 0x293acc337277d5d4618e919f8d6fe22adcdb401e
 ## It's just a proof of concept
 * But I'm building it out
 * I'm doing it on my own nights and weekends
-* You can get involved too! contact me on the GitHub repo
-  (jessebmiller/inc.xyz)[https://github.com/jessebmiller/inc.xyz)
+* You can [get involved](http://incrementalist.xyz/get-involved) too!

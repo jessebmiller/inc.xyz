@@ -33,10 +33,10 @@ interface Transaction {
 
 const transactionPaysPrice = (
     tx: Transaction,
-    resourceId: string,
+    fundingAddress: string,
     price: number,
 ): boolean => {
-    if (resourceId !== tx.to) {
+    if (fundingAddress !== tx.to) {
         return false
     }
     if (price > parseInt(tx.value, 10)) {
@@ -52,10 +52,13 @@ const transactionPaysPrice = (
 
 export const signerDidPay = async (
     signingAddress: string,
-    resourceId: string,
+    fundingAddress: string,
     price: number,
 ): Promise<boolean> => {
-    let apiURL = new URL("http://api-ropsten.etherscan.io/api")
+    if (price === 0) {
+        return await true
+    }
+    let apiURL = new URL("https://api-ropsten.etherscan.io/api")
     apiURL.searchParams.append("address", signingAddress)
     apiURL.searchParams.append("module", "account")
     apiURL.searchParams.append("action", "txlist")
@@ -63,15 +66,11 @@ export const signerDidPay = async (
     const response = await fetch(urlString)
     const responseObj = await response.json()
     for(let tx of responseObj.result) {
-        if(transactionPaysPrice(tx, resourceId, price)) {
-            return new Promise<boolean>((resolve, reject) => {
-                resolve(true)
-            })
+        if(transactionPaysPrice(tx, fundingAddress, price)) {
+            return await true
         }
     }
-    return new Promise<boolean>((resolve, reject) => {
-        resolve(false)
-    })
+    return await false
 }
 
 export const summary = resource => {

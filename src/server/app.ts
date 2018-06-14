@@ -7,12 +7,14 @@ import {
     bufferToHex,
 } from 'ethereumjs-util'
 
-import resources from './resources'
+import getResources from './resources'
 import { signerDidPay, summary, withinTimeWindow } from './helpers'
 
 const express = require('express')
 
 const app = express()
+
+const resources = getResources()
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*")
@@ -72,7 +74,7 @@ app.get("/v1/resources/", async (req, res) => {
     // return resource if paid for
     // return summary if not paid for
     let resource = resources[resourceId]
-    const paid = await signerDidPay(signingAddress, resourceId, resource.price)
+    const paid = await signerDidPay(signingAddress, resource.fundingAddress, resource.price)
     if (!paid) {
         resource = summary(resource)
         resource.paid = false
