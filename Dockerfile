@@ -26,6 +26,7 @@ WORKDIR /app
 COPY --from=builder /build/node_modules /app/node_modules
 COPY --from=builder /build/server-dist /app/server
 COPY --from=builder /build/dist /app/server/client
+COPY src/server/resources /app/server/resources
 
 CMD ["node", "/app/server/app.js"]
 
