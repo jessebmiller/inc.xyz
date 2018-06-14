@@ -1,12 +1,33 @@
-const resources = {
-    "0x293acc337277d5d4618e919f8d6fe22adcdb401e": {
-        title: "Test Article for sale on Test Net",
-        "abstract": "This article is for sale for test eth, to test it out.",
-        content: "## If this works, you paid! \n\n This is the content of the test article",
-        price: 1000000000000000,
-        "type": "Article",
-        fundingAddress: "0x293acc337277d5d4618e919f8d6fe22adcdb401e",
+import * as fs from 'fs'
+import * as matter from 'gray-matter'
+
+let resources
+// TODO make resources location configurable
+const resourceDir = 'resources/'
+
+// read in all the markdown files in ./resources and produce a resources object
+fs.readdir(resourceDir, (err, filenames) => {
+    if (err) {
+        resources = {}
+        return
     }
-}
+    filenames.forEach((filename) => {
+        fs.readFile(resourceDir + filename, 'utf8', (err, data) => {
+            if (err) {
+                return
+            }
+            const [contentName, format] = filename.split('.')
+            if (format !== "md") {
+                console.log(`WARNING: ${format} not supported expect [md]`)
+                return
+            }
+            const parsedFrontmatter = matter(data)
+            resources[contentName] = {
+                content: parsedFrontmatter.content,
+                ...parsedFrontmatter.data,
+            }
+        })
+    })
+})
 
 export default resources
