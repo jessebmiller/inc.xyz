@@ -64,15 +64,9 @@ app.get("/v1/resources/", async (req, res) => {
         timestamp,
         resourceId,
     } = recoverResourceRequest(req.query.sig, req.query.msg)
-    // confirm timestamp in valid range
-    if (!withinTimeWindow(timestamp)) {
-        res.status(403).send("Forbidden")
-        return
-    }
-    // TODO reconsider the protocol
     // check if signingAddress paid for resource Id
     // return resource if paid for
-    // return summary if not paid fo
+    // return summary otherwise
     let resource = resources[resourceId]
     const paid = await signerDidPay(signingAddress, resource.fundingAddress, resource.price)
     if (!paid) {
