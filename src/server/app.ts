@@ -8,7 +8,7 @@ import {
 } from 'ethereumjs-util'
 
 import getResources from './resources'
-import { signerDidPay, summary, withinTimeWindow } from './helpers'
+import { signerDidPay, summary } from './helpers'
 
 const express = require('express')
 
@@ -28,12 +28,11 @@ app.use(express.static(__dirname + "/client"))
 
 interface ResourceRequest {
     signingAddress: string
-    timestamp: Date
     resourceId: string
 }
 
 function recoverResourceRequest(sig: string, msg: string): ResourceRequest {
-    const [timestamp, resourceId] = msg.split('|')
+    const resourceId = msg
     const resourceIdBuffer = toBuffer(resourceId)
     const resourceIdHash = hashPersonalMessage(resourceIdBuffer)
 
@@ -51,7 +50,6 @@ function recoverResourceRequest(sig: string, msg: string): ResourceRequest {
 
     const resourceRequest = {
         signingAddress,
-        timestamp: new Date(timestamp),
         resourceId,
     }
     return resourceRequest
@@ -61,9 +59,9 @@ app.get("/v1/resources/", async (req, res) => {
     console.log("GET /v1/resources/", req.query.msg, req.query.sig)
     const {
         signingAddress,
-        timestamp,
         resourceId,
     } = recoverResourceRequest(req.query.sig, req.query.msg)
+    console.log("recovered", signingAddress, resourceId)
     // check if signingAddress paid for resource Id
     // return resource if paid for
     // return summary otherwise

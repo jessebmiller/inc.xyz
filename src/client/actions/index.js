@@ -4,11 +4,6 @@ import Eth from 'ethjs'
 
 import { sign } from '../helpers'
 
-// prepare data for a signed resource request
-const prepResourceRequest = (resourceId, timestamp) => {
-  return `${timestamp}|${resourceId}`
-}
-
 const resourceURL = (sig, msg) => {
   URL = `http://${window.location.host}/v1/resources/?sig=${sig}&msg=${msg}`
   return URL
@@ -17,8 +12,7 @@ const resourceURL = (sig, msg) => {
 export async function requestLocationResource({ pathname }) {
   const resourceId = pathname.substring(1)
   const eth = store.getState().eth
-  const timestamp = new Date()
-  const resourceRequest = prepResourceRequest(resourceId, timestamp)
+  const resourceRequest = resourceId
   const signedResourceRequest = await sign(resourceRequest)
   store.dispatch(request(signedResourceRequest, resourceRequest))
 }
